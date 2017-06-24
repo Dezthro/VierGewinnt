@@ -166,7 +166,7 @@ public class Game {
 	
 	private boolean isInGameField(int pRow, int pColumn) {
 		
-		return (pRow >= 0 && pRow < 6 || pColumn >= 0 && pColumn < 7);
+		return (pRow > -1 && pRow < 7 && pColumn > -1 && pColumn < 8);
 		
 	}
 	
@@ -197,6 +197,22 @@ public class Game {
 	public Field[] getWinnersField() {
 		
 		return (this.getGameFinished()) ? winnersField : null;
+		
+	}
+	
+	private boolean isInWinnersField(Field pField) {
+		
+		if(this.getGameFinished()) {
+		
+			Field[] tempFields= this.getWinnersField();
+			
+			return (pField == tempFields[0] || pField == tempFields[1] || pField == tempFields[2] || pField == tempFields[3]);
+		
+		} else {
+			
+			return false;
+			
+		}
 		
 	}
 	
@@ -263,244 +279,270 @@ public class Game {
 		
 		if(!this.getGameFinished()) {
 			
-			// possiblities for winning
-			Field[] rightUp = new Field[4];
-			Field[] horizontal = new Field[4];
-			Field[] rightDown = new Field[4];
-			Field[] vertical = new Field[4];
+			boolean gameFull = true;
 			
-			// variables for a possibility winning row with counter
-			boolean rightUpRow = false;
-			boolean horizontalRow = false;
-			boolean rightDownRow = false;
-			boolean verticalRow = false;
-			int counterRightUp = 0;
-			int counterHorizontal = 0;
-			int counterRightDown = 0;
-			int counterVertical = 0;
+			outerloop:
+			for(int i = 0; i < gameField.length; i++) {
 			
-			// testing for a win
-			for(int i = 3; i <= -3; i--) {
+				for(int j = 0; j < gameField[0].length; j++) {
 				
-				// diagonal right up
-				if(this.isInGameField((pRow - i), (pColumn + i))) {
-					
-					Field temp = this.getField((pRow - i), (pColumn + i));
-					
-					if(temp.getIsUsed()) {
+					if(!gameField[i][j].getIsUsed()) {
 						
-						if(temp.getOwnByFirst() == this.getFirstActive()) {
-							
-							if(rightUpRow) {
-								
-								counterRightUp++;
-								
-							} else {
-								
-								counterRightUp = 0;
-								
-							}
-							
-							rightUp[counterRightUp] = temp;
-							
-							rightUpRow = true;
-							
-						} else {
-							
-							rightUpRow = false;
-							
-						}
+						gameFull = false;
+						break outerloop;
 						
 					}
-					
-				}
-				
-				// horizontal
-				if(this.isInGameField((pRow - i), (pColumn))) {
-					
-					Field temp = this.getField((pRow - i), (pColumn));
-					
-					if(temp.getIsUsed()) {
-						
-						if(temp.getOwnByFirst() == this.getFirstActive()) {
-							
-							if(horizontalRow) {
-								
-								counterHorizontal++;
-								
-							} else {
-								
-								counterHorizontal = 0;
-								
-							}
-							
-							horizontal[counterHorizontal] = temp;
-							
-							horizontalRow = true;
-							
-						} else {
-							
-							horizontalRow = false;
-							
-						}
-						
-					}
-					
-				}
-				
-				// diagonal right down
-				if(this.isInGameField((pRow - i), (pColumn - i))) {
-					
-					Field temp = this.getField((pRow - i), (pColumn - i));
-					
-					if(temp.getIsUsed()) {
-						
-						if(temp.getOwnByFirst() == this.getFirstActive()) {
-							
-							if(rightDownRow) {
-								
-								counterRightDown++;
-								
-							} else {
-								
-								counterRightDown = 0;
-								
-							}
-							
-							rightDown[counterRightDown] = temp;
-							
-							rightDownRow = true;
-							
-						} else {
-							
-							rightDownRow = false;
-							
-						}
-						
-					}
-					
-				}
-				
-				// vertical
-				if(this.isInGameField((pRow), (pColumn - i))) {
-					
-					Field temp = this.getField((pRow + i), (pColumn - i));
-					
-					if(temp.getIsUsed()) {
-						
-						if(temp.getOwnByFirst() == this.getFirstActive()) {
-							
-							if(verticalRow) {
-								
-								counterVertical++;
-								
-							} else {
-								
-								counterVertical = 0;
-								
-							}
-							
-							vertical[counterVertical] = temp;
-							
-							verticalRow = true;
-							
-						} else {
-							
-							verticalRow = false;
-							
-						}
-						
-					}
-					
-				}
-				
-				if(rightUp[4] != null) {
-					
-					this.changeGameFinished();
-					winnersField = rightUp;
-					wonByFirst = this.getFirstActive();
-					
-					if(this.getWonByFirst()) {
-						
-						this.increaseScoreA();
-						
-					} else {
-						
-						this.increaseScoreB();
-						
-					}
-					
-					break;
-					
-				}
-				
-				if(horizontal[4] != null) {
-					
-					this.changeGameFinished();
-					winnersField = horizontal;
-					wonByFirst = this.getFirstActive();
-					
-					if(this.getWonByFirst()) {
-						
-						this.increaseScoreA();
-						
-					} else {
-						
-						this.increaseScoreB();
-						
-					}
-					
-					break;
-					
-				}
-				
-				if(rightDown[4] != null) {
-					
-					this.changeGameFinished();
-					winnersField = rightDown;
-					wonByFirst = this.getFirstActive();
-					
-					if(this.getWonByFirst()) {
-						
-						this.increaseScoreA();
-						
-					} else {
-						
-						this.increaseScoreB();
-						
-					}
-					
-					break;
-					
-				}
-				
-				if(vertical[4] != null) {
-					
-					this.changeGameFinished();
-					winnersField = vertical;
-					wonByFirst = this.getFirstActive();
-					
-					if(this.getWonByFirst()) {
-						
-						this.increaseScoreA();
-						
-					} else {
-						
-						this.increaseScoreB();
-						
-					}
-					
-					break;
-					
+			
 				}
 				
 			}
 			
-			return this.getGameFinished();
+			if(!gameFull) {
+			
+				// possiblities for winning
+				Field[] rightUp = new Field[4];
+				Field[] horizontal = new Field[4];
+				Field[] rightDown = new Field[4];
+				Field[] vertical = new Field[4];
+				
+				// variables for a possibility winning row with counter
+				boolean rightUpRow = false;
+				boolean horizontalRow = false;
+				boolean rightDownRow = false;
+				boolean verticalRow = false;
+				int counterRightUp = 0;
+				int counterHorizontal = 0;
+				int counterRightDown = 0;
+				int counterVertical = 0;
+				
+				// testing for a win
+				for(int i = 3; i < -4; i--) {
+					
+					// diagonal right up
+					if(this.isInGameField((pRow - i), (pColumn + i))) {
+						
+						Field temp = this.getField((pRow - i), (pColumn + i));
+						
+						if(temp.getIsUsed()) {
+							
+							if(temp.getOwnByFirst() == this.getFirstActive()) {
+								
+								if(rightUpRow) {
+									
+									counterRightUp++;
+									
+								} else {
+									
+									counterRightUp = 0;
+									
+								}
+								
+								rightUp[counterRightUp] = temp;
+								
+								rightUpRow = true;
+								
+							} else {
+								
+								rightUpRow = false;
+								
+							}
+							
+						}
+						
+					}
+					
+					// horizontal
+					if(this.isInGameField((pRow - i), (pColumn))) {
+						
+						Field temp = this.getField((pRow - i), (pColumn));
+						
+						if(temp.getIsUsed()) {
+							
+							if(temp.getOwnByFirst() == this.getFirstActive()) {
+								
+								if(horizontalRow) {
+									
+									counterHorizontal++;
+									
+								} else {
+									
+									counterHorizontal = 0;
+									
+								}
+								
+								horizontal[counterHorizontal] = temp;
+								
+								horizontalRow = true;
+								
+							} else {
+								
+								horizontalRow = false;
+								
+							}
+							
+						}
+						
+					}
+					
+					// diagonal right down
+					if(this.isInGameField((pRow - i), (pColumn - i))) {
+						
+						Field temp = this.getField((pRow - i), (pColumn - i));
+						
+						if(temp.getIsUsed()) {
+							
+							if(temp.getOwnByFirst() == this.getFirstActive()) {
+								
+								if(rightDownRow) {
+									
+									counterRightDown++;
+									
+								} else {
+									
+									counterRightDown = 0;
+									
+								}
+								
+								rightDown[counterRightDown] = temp;
+								
+								rightDownRow = true;
+								
+							} else {
+								
+								rightDownRow = false;
+								
+							}
+							
+						}
+						
+					}
+					
+					// vertical
+					if(this.isInGameField((pRow), (pColumn - i))) {
+						
+						Field temp = this.getField((pRow + i), (pColumn - i));
+						
+						if(temp.getIsUsed()) {
+							
+							if(temp.getOwnByFirst() == this.getFirstActive()) {
+								
+								if(verticalRow) {
+									
+									counterVertical++;
+									
+								} else {
+									
+									counterVertical = 0;
+									
+								}
+								
+								vertical[counterVertical] = temp;
+								
+								verticalRow = true;
+								
+							} else {
+								
+								verticalRow = false;
+								
+							}
+							
+						}
+						
+					}
+					
+					if(counterRightUp == 3) {
+						
+						this.changeGameFinished();
+						winnersField = rightUp;
+						wonByFirst = this.getFirstActive();
+						
+						if(this.getWonByFirst()) {
+							
+							this.increaseScoreA();
+							
+						} else {
+							
+							this.increaseScoreB();
+							
+						}
+						
+						break;
+						
+					}
+					
+					if(counterHorizontal == 3) {
+						
+						this.changeGameFinished();
+						winnersField = horizontal;
+						wonByFirst = this.getFirstActive();
+						
+						if(this.getWonByFirst()) {
+							
+							this.increaseScoreA();
+							
+						} else {
+							
+							this.increaseScoreB();
+							
+						}
+						
+						break;
+						
+					}
+					
+					if(counterRightDown == 3) {
+						
+						this.changeGameFinished();
+						winnersField = rightDown;
+						wonByFirst = this.getFirstActive();
+						
+						if(this.getWonByFirst()) {
+							
+							this.increaseScoreA();
+							
+						} else {
+							
+							this.increaseScoreB();
+							
+						}
+						
+						break;
+						
+					}
+					
+					if(counterVertical == 3) {
+						
+						this.changeGameFinished();
+						winnersField = vertical;
+						wonByFirst = this.getFirstActive();
+						
+						if(this.getWonByFirst()) {
+							
+							this.increaseScoreA();
+							
+						} else {
+							
+							this.increaseScoreB();
+							
+						}
+						
+						break;
+						
+					}
+					
+				}
+				
+			} else {
+				
+				this.changeGameFinished();
+				
+			}
+				
+				return this.getGameFinished();
 			
 		} else {
 			
-			return true;
+			return false;
 			
 		}
 		
@@ -510,6 +552,7 @@ public class Game {
 	public void resetGameField() {
 		
 		firstActive = true;
+		this.changeGameFinished();
 		
 		for(int i = 0; i < gameField.length; i++) {
 			
@@ -544,23 +587,35 @@ public class Game {
 
 	public String toString() {
 		
-		String retString = "Player A: x\nPlayer B : o \n\n";
+		String retString = "Player A named '" + this.getNameA() + "': x\nPlayer B named '" + this.getNameB() + "': o \n\n";
 		
 		for(int i = 0; i < gameField.length; i++) {
+			
+			retString = retString + i + " ";
 			
 			for(int j = 0; j < gameField[0].length; j++) {
 				
 				if(gameField[i][j].getIsUsed()) {
 					
+					String tempString = "";
+					
 					if(gameField[i][j].getOwnByFirst()) {
 						
-						retString = retString + "x" + " ";
+						tempString = "x";
 						
 					} else {
 						
-						retString = retString + "o" + " ";
+						tempString = "o";
 						
 					}
+					
+					if(this.isInWinnersField(gameField[i][j])) {
+						
+						tempString = tempString.toUpperCase();
+						
+					}
+					
+					retString = retString + tempString + " ";
 					
 				} else {
 					
@@ -573,6 +628,8 @@ public class Game {
 			retString = retString + "\n";
 			
 		}
+		
+		retString = retString + "  0 1 2 3 4 5 6\n\n";
 		
 		if(this.getGameFinished()) {
 			
