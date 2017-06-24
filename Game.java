@@ -294,6 +294,8 @@ public class Game {
 		
 		if(!this.getGameFinished()) {
 			
+			boolean gameFull = true;
+			
 			outerloop:
 			for(int i = 0; i < gameField.length; i++) {
 			
@@ -301,12 +303,18 @@ public class Game {
 				
 					if(gameField[i][j].getOwner() == 0) {
 						
-						this.setGameStage(3);
+						gameFull = false;;
 						break outerloop;
 						
 					}
 			
 				}
+				
+			}
+			
+			if(gameFull) {
+				
+				this.setGameStage(3);
 				
 			}
 			
@@ -331,7 +339,7 @@ public class Game {
 								 {gameField[0][0], gameField[0][1], gameField[0][2], gameField[0][3], gameField[0][4], gameField[0][5], gameField[0][6]}};
 			
 			outerloop:
-			for(int i = 0; i < testFor.length; ) {
+			for(int i = 0; i < testFor.length; i++) {
 			
 				switch(i) {
 					
@@ -367,8 +375,6 @@ public class Game {
 					Field temp;
 					
 					while(this.isInGameField( (testFor[i][j].getRow() + (rowMove * counter)), (testFor[i][j].getColumn() + (columnMove * counter)) )) {
-						
-						System.out.print((testFor[i][j].getRow() + (rowMove * counter)) + " " + (testFor[i][j].getColumn() + (columnMove * counter)) + ", ");
 						
 						temp = this.getField( (testFor[i][j].getRow() + (rowMove * counter)), (testFor[i][j].getColumn() + (columnMove * counter)) );
 						
@@ -416,8 +422,6 @@ public class Game {
 						counter++;
 						
 					}
-				
-					System.out.println("");
 					
 					if(counterA == 3) {
 						
@@ -430,6 +434,7 @@ public class Game {
 						break outerloop;
 						
 					}
+					
 					
 				}
 			
