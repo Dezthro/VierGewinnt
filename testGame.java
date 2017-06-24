@@ -10,7 +10,7 @@ public class testGame {
 			
 			int tempColumn = ThreadLocalRandom.current().nextInt(7);
 			System.out.println();
-			System.out.println("new Field in Column: " + tempColumn + " from " + (!game.getFirstActive()));
+			System.out.println("new Field in Column: " + tempColumn + " from " + game.getName(game.getActivePlayer()));
 			game.add(tempColumn);
 			System.out.println();
 			System.out.println(game.toString());
