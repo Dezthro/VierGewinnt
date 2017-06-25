@@ -1,3 +1,9 @@
+/**
+ * a class which creates the game
+ * 
+ * @author Marius Bonke 4839983 Gruppe 3b
+ * @author Lucas Schröder 4809832 Gruppe 3b
+ */
 public class Game {
 
 	public class Field {
@@ -426,11 +432,13 @@ public class Game {
 					if(counterA == 3) {
 						
 						this.setGameStage(1);
+						winnersField = aRow;
 						break outerloop;
 						
 					} else if(counterB == 3) {
 						
 						this.setGameStage(2);
+						winnersField = bRow;
 						break outerloop;
 						
 					}
