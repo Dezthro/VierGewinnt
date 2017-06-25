@@ -7,17 +7,22 @@ import javax.swing.*;
 public class SwingFenster {
 	
 	 private JFrame fenster;
-	 private JPanel spieler1;
+	 private JPanel spielerEins;
 	 private JPanel score;
-	 private JPanel spieler2;
-	 private JPanel anzeigeSpieler1;
+	 private JPanel spielerZwei;
+	 private JPanel anzeigeSpielerEins;
 	 private JPanel spielfeld;
-	 private JPanel anzeigeSpieler2;
+	 private JPanel anzeigeSpielerZwei;
 	 private JPanel gameLog;
 	 private JPanel resetArea;
-	 private JLabel feld;
 	 private GridBagLayout aufteilung;
 	 private GridBagConstraints dimensionen;
+	 private JLabel nameSpielerEins;
+	 private JLabel nameSpielerZwei;
+	 private String nameEins;
+	 private String nameZwei;
+	 private int count;
+
 	
 	public SwingFenster() {
 		fensterVorbereiten();
@@ -27,6 +32,7 @@ public class SwingFenster {
 	}
 	
 	public void fensterVorbereiten() {
+		count = 1;
 		fenster = new JFrame();
 		aufteilung = new GridBagLayout();
 		fenster.setTitle("Fenster mit Vogel F");
@@ -41,7 +47,7 @@ public class SwingFenster {
 		dimensionen.weighty = 0.2;
 		dimensionen.gridx = 0;
 		dimensionen.gridy = 0;
-		makePanel(spieler1, Color.red, aufteilung, dimensionen);
+		makeLabel(nameSpielerEins, Color.red, nameEins, aufteilung, dimensionen);
 		dimensionen.weightx = 1.0;
 		dimensionen.gridx = 1;
 		dimensionen.gridy = 0;
@@ -49,12 +55,12 @@ public class SwingFenster {
 		dimensionen.weightx = 0.2;
 		dimensionen.gridx = 2;
 		dimensionen.gridy = 0;
-		makePanel(spieler2, Color.blue, aufteilung, dimensionen);
+		makeLabel(nameSpielerZwei, Color.blue, nameZwei,  aufteilung, dimensionen);
 		dimensionen.weightx = 0.2;
 		dimensionen.weighty = 1.0;
 		dimensionen.gridx = 0;
 		dimensionen.gridy = 1; 
-		makePanel(anzeigeSpieler1, Color.green, aufteilung, dimensionen);
+		makePanel(anzeigeSpielerEins, Color.green, aufteilung, dimensionen);
 		dimensionen.weightx = 1.0;
 		dimensionen.weighty = 1.0;
 		dimensionen.gridx = 1;
@@ -64,13 +70,14 @@ public class SwingFenster {
 		dimensionen.weighty = 1.0;
 		dimensionen.gridx = 2;
 		dimensionen.gridy = 1; 
-		makePanel(anzeigeSpieler1, Color.magenta, aufteilung, dimensionen);
+		makePanel(anzeigeSpielerZwei, Color.magenta, aufteilung, dimensionen);
 		dimensionen.weightx = 1.0;
 		dimensionen.weighty = 0.2;
 		dimensionen.gridx = 1;
 		dimensionen.gridy = 2;
 		makePanel(gameLog, Color.orange , aufteilung, dimensionen);
 		fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		turnPlayer1(anzeigeSpielerEins, anzeigeSpielerZwei);
 		fenster.setVisible(true);
 	}
 	
@@ -79,6 +86,57 @@ public class SwingFenster {
 		gridbag.setConstraints(panel, c);
 		panel.setBackground(color);
 		fenster.add(panel);
+	}
+	
+	public void makeLabel (JLabel label, Color color, String name, GridBagLayout gridbag, GridBagConstraints c) {
+			label = new JLabel();
+			if (name == null) {
+				name = "Spieler " + count; 
+			}
+			label.setText(name);
+			label.setHorizontalAlignment(SwingConstants.CENTER);
+			label.setFont(new Font(label.getFont().getName(), Font.PLAIN, 64));
+			gridbag.setConstraints(label, c);
+			label.setForeground(color);
+			label.setBackground(new Color(255, 255, 255));
+			label.setOpaque(true);
+			fenster.add(label);
+			count++;
+	}		
+
+	
+	public void turnPlayer1(JPanel panelEins, JPanel panelZwei) {
+		fenster.remove(panelEins);
+		dimensionen.weightx = 0.2;
+		dimensionen.weighty = 1.0;
+		dimensionen.gridx = 0;
+		dimensionen.gridy = 1; 
+		makePanel(panelEins, Color.red, aufteilung, dimensionen);
+		fenster.remove(panelZwei);
+		dimensionen.weightx = 0.2;
+		dimensionen.weighty = 1.0;
+		dimensionen.gridx = 2;
+		dimensionen.gridy = 1; 
+		makePanel(panelZwei, Color.white, aufteilung, dimensionen);
+	}
+	
+	public void turnPlayer2(JPanel panelEins, JPanel panelZwei) {
+		fenster.remove(panelEins);
+		dimensionen.weightx = 0.2;
+		dimensionen.weighty = 1.0;
+		dimensionen.gridx = 0;
+		dimensionen.gridy = 1; 
+		makePanel(panelEins, Color.white, aufteilung, dimensionen);
+		fenster.remove(panelZwei);
+		dimensionen.weightx = 0.2;
+		dimensionen.weighty = 1.0;
+		dimensionen.gridx = 2;
+		dimensionen.gridy = 1; 
+		makePanel(panelZwei, Color.blue, aufteilung, dimensionen);
+	}
+	
+	public void setNameEins(String name) {
+		nameEins = name;
 	}
 	
 	
